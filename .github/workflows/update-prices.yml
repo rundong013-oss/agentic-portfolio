@@ -2,7 +2,9 @@ name: Update Prices
 
 on:
   schedule:
-    # Run at 22:30 UTC on weekdays (Mon-Fri), after US market close
+    # Hourly during US market hours: 14:30-20:30 UTC (9:30 AM-4:30 PM ET), Mon-Fri
+    - cron: "30 14-20 * * 1-5"
+    # EOD backfill after market close: 22:30 UTC
     - cron: "30 22 * * 1-5"
   workflow_dispatch: # Allow manual trigger
 
@@ -19,15 +21,27 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Fetch latest prices
+      - name: Determine mode
+        id: mode
+        run: |
+          HOUR=$(date -u +%H)
+          if [ "$HOUR" -ge 14 ] && [ "$HOUR" -le 20 ]; then
+            echo "flag=--intraday" >> "$GITHUB_OUTPUT"
+            echo "msg=intraday $(date -u +%Y-%m-%dT%H:%M)" >> "$GITHUB_OUTPUT"
+          else
+            echo "flag=" >> "$GITHUB_OUTPUT"
+            echo "msg=eod $(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fetch prices
         env:
           FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
-        run: node scripts/fetch-prices.js
+        run: node scripts/fetch-prices.js ${{ steps.mode.outputs.flag }}
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/prices.json
-          git diff --staged --quiet || git commit -m "chore: update prices $(date -u +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "chore: update prices ${{ steps.mode.outputs.msg }}"
           git push
