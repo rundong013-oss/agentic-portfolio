@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Agentic Reality Portfolio</title>
+<title>Agentic Portfolio</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
@@ -208,7 +208,7 @@ function compute(){
 }
 
 const I18N={
- en:{title:"Agentic Reality Portfolio",vsSpy:"vs SPY",mdd:"Max drawdown",lsn:"Long / Short / Net",cumTitle:"Cumulative return",port:"Portfolio",
+ en:{title:"Agentic Portfolio",vsSpy:"vs SPY",mdd:"Max drawdown",lsn:"Long / Short / Net",cumTitle:"Cumulative return",port:"Portfolio",
    noData:"No data yet",noDataSub:"The chart appears once closing prices are loaded.",daily:"Daily returns",date:"Date",excess:"Excess",cum:"Cumulative",
    attr:"Contribution by trade",holdings:"Holdings",theme:"Theme",positions:"Positions",gross:"Gross",contrib:"Contribution",bigStocks:"Stocks ≥ 5%",
    ticker:"Ticker",side:"Side",weight:"Weight",activity:"Activity",action:"Action",change:"Change",note:"Note",
@@ -216,7 +216,7 @@ const I18N={
    all:"All",init:"Initial",initBasket:"Initial basket",dayRet:"Daily",contribTip:"Contribution",sep:", ",
    sub:(b,n,l)=>`Since ${b} · ${n} trading days · data through ${l}`,
    footer:"Method: position changes take effect after the close on the logged date; daily rebalance to target weights; price returns, excluding dividends, borrow and financing costs; missing prices count as zero return that day. Limits: each trade ≤ 20% gross; each stock 3%–8% net (secondary names from 1.5%). EXPN is London-listed and converted to USD. For research only, not investment advice."},
- zh:{title:"Agentic Reality 组合",vsSpy:"相对 SPY",mdd:"最大回撤",lsn:"多 / 空 / 净",cumTitle:"累计收益",port:"组合",
+ zh:{title:"Agentic 组合",vsSpy:"相对 SPY",mdd:"最大回撤",lsn:"多 / 空 / 净",cumTitle:"累计收益",port:"组合",
    noData:"暂无数据",noDataSub:"写入收盘价后自动生成。",daily:"每日收益",date:"日期",excess:"超额",cum:"累计",
    attr:"收益贡献",holdings:"当前持仓",theme:"主题",positions:"标的",gross:"总仓位",contrib:"区间贡献",bigStocks:"个股（仓位 ≥ 5%）",
    ticker:"代码",side:"方向",weight:"仓位",activity:"操作记录",action:"操作",change:"仓位变化",note:"备注",
@@ -230,7 +230,7 @@ const T=k=>I18N[LANG][k];
 const topicOf=t=>LANG==="en"?(t.en||t.topic):t.topic;
 function applyLang(){
   document.documentElement.lang = LANG==="en"?"en":"zh-CN";
-  document.title = LANG==="en"?"Agentic Reality Portfolio":"Agentic Reality 组合";
+  document.title = LANG==="en"?"Agentic Portfolio":"Agentic 组合";
   document.querySelectorAll("[data-i]").forEach(el=>{ el.textContent=T(el.dataset.i); });
   $("lEn").setAttribute("aria-pressed",LANG==="en"); $("lZh").setAttribute("aria-pressed",LANG==="zh");
 }
