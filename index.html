@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agentic Reality Portfolio</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#F5F5F7; --card:#FFFFFF; --ink:#1D1D1F; --muted:#86868B; --hair:rgba(0,0,0,.08);
+  --port:#0071E3; --bench:#AEAEB2; --gain:#1A9E4B; --loss:#E0332B; --pill:#E8E8ED;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue","PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --card:#1C1C1E; --ink:#F5F5F7; --muted:#8E8E93; --hair:rgba(255,255,255,.1);
+    --port:#2997FF; --bench:#636366; --gain:#30D158; --loss:#FF453A; --pill:#2C2C2E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --card:#1C1C1E; --ink:#F5F5F7; --muted:#8E8E93; --hair:rgba(255,255,255,.1);
+  --port:#2997FF; --bench:#636366; --gain:#30D158; --loss:#FF453A; --pill:#2C2C2E;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.47;
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.wrap{max-width:1080px;margin:0 auto;padding:56px 24px 80px}
+:focus-visible{outline:2px solid var(--port);outline-offset:3px;border-radius:6px}
+.muted{color:var(--muted);font-size:13px}
+.pos{color:var(--gain)} .neg{color:var(--loss)}
+
+/* hero */
+.hero{margin-bottom:40px}
+.eyebrow-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:17px;font-weight:600;margin:0;color:var(--muted);letter-spacing:-.01em}
+select{appearance:none;-webkit-appearance:none;font:inherit;font-size:13px;color:var(--ink);background:var(--pill);border:0;border-radius:980px;
+  padding:6px 30px 6px 14px;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.ctrls{display:flex;gap:10px;align-items:center}
+.seg{display:inline-flex;background:var(--pill);border-radius:980px;padding:2px}
+.seg button{font:inherit;font-size:12px;border:0;background:transparent;color:var(--muted);padding:4px 12px;border-radius:980px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.big{font-size:clamp(48px,9vw,80px);font-weight:600;letter-spacing:-.035em;line-height:1.05;margin:14px 0 6px}
+.subline{font-size:15px;color:var(--muted);min-height:22px}
+.subline b{font-weight:500}
+
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);margin:36px 0 0}
+.metric{padding:0 20px;border-left:1px solid var(--hair)}
+.metric:first-child{padding-left:0;border-left:0}
+.metric .k{font-size:13px;color:var(--muted)}
+.metric .v{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-top:4px}
+@media (max-width:720px){.metrics{grid-template-columns:repeat(2,1fr);row-gap:24px}.metric:nth-child(3){padding-left:0;border-left:0}}
+
+/* cards */
+.card{background:var(--card);border-radius:22px;padding:28px;margin-bottom:20px}
+.card h2{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0}
+.head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.legend{display:flex;gap:18px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.chart-main{position:relative;height:380px;margin-top:20px}
+.chart-sm{position:relative;height:130px;margin-top:18px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.card,.grid2>*{min-width:0}
+body{overflow-x:hidden}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}.chart-main{height:280px}.card{padding:22px;border-radius:18px}}
+
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted);gap:6px}
+.empty strong{color:var(--ink);font-size:19px;font-weight:600}
+
+/* tables */
+.tbl{overflow-x:auto;margin-top:14px}
+.scroll{max-height:380px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:11px 10px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--hair)}
+th:first-child,td:first-child{padding-left:0}
+th:last-child,td:last-child{padding-right:0}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:500;font-size:12px;position:sticky;top:0;background:var(--card)}
+td.num,th.num{text-align:right}
+td.wrapc{white-space:normal;min-width:220px;font-size:13px;color:var(--muted);line-height:1.5}
+td.wrapc .l{color:var(--ink)} td.wrapc .s{color:var(--ink)}
+.l{color:var(--gain)} .s{color:var(--loss)}
+.tag{display:inline-block;font-size:12px;padding:2px 10px;border-radius:980px;background:var(--pill);color:var(--ink)}
+.act-up{color:var(--gain);font-weight:500} .act-down{color:var(--loss);font-weight:500}
+.subh{font-size:15px;font-weight:600;margin:28px 0 0;color:var(--ink)}
+.subh:first-of-type{margin-top:20px}
+footer{color:var(--muted);font-size:12px;margin:32px auto 0;max-width:80ch;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow-row">
+      <h1 data-i="title"></h1>
+      <div class="ctrls"><div class="seg" role="group" aria-label="Language"><button id="lEn" type="button">EN</button><button id="lZh" type="button">中文</button></div><select id="startSel" aria-label="Start date"></select></div>
+    </div>
+    <div class="big" id="sCum">–</div>
+    <div class="subline" id="subline"></div>
+    <div class="metrics" aria-label="Key metrics">
+      <div class="metric"><div class="k" id="sDayK"></div><div class="v" id="sDay">–</div></div>
+      <div class="metric"><div class="k" data-i="vsSpy"></div><div class="v" id="sEx">–</div></div>
+      <div class="metric"><div class="k" data-i="mdd"></div><div class="v" id="sDD">–</div></div>
+      <div class="metric"><div class="k" data-i="lsn"></div><div class="v" id="sExp" style="font-size:20px">–</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="head"><h2 data-i="cumTitle"></h2>
+      <div class="legend"><span><i style="background:var(--port)"></i><span data-i="port"></span></span><span><i style="background:var(--bench)"></i>SPY</span></div></div>
+    <div class="chart-main"><canvas id="cumChart" aria-label="Cumulative return chart"></canvas>
+      <div class="empty" id="emptyMain"><strong data-i="noData"></strong><span data-i="noDataSub"></span></div></div>
+    <div class="chart-sm"><canvas id="dayChart" aria-label="Daily returns chart"></canvas></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2 data-i="daily"></h2>
+      <div class="tbl scroll"><table id="dailyTbl"><thead><tr><th data-i="date"></th><th class="num" data-i="port"></th><th class="num">SPY</th><th class="num" data-i="excess"></th><th class="num" data-i="cum"></th></tr></thead><tbody></tbody></table></div>
+    </section>
+    <section class="card">
+      <h2 data-i="attr"></h2>
+      <div style="position:relative;height:420px;margin-top:16px"><canvas id="attrChart" aria-label="Contribution chart"></canvas></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2 data-i="holdings"></h2>
+    <div>
+      <div>
+        <h3 class="subh">Trade</h3>
+        <div class="tbl"><table id="posTbl"><thead><tr><th>#</th><th data-i="theme"></th><th data-i="positions"></th><th class="num" data-i="gross"></th><th class="num" data-i="contrib"></th></tr></thead><tbody></tbody></table></div>
+      </div>
+      <div>
+        <h3 class="subh" data-i="bigStocks"></h3>
+        <div class="tbl"><table id="stkTbl"><thead><tr><th data-i="ticker"></th><th data-i="side"></th><th class="num" data-i="weight"></th><th>Trade</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-i="activity"></h2>
+    <div class="tbl scroll"><table id="logTbl"><thead><tr><th data-i="date"></th><th>Trade</th><th data-i="action"></th><th class="num" data-i="change"></th><th data-i="note"></th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <footer data-i="footer"></footer>
+</div>
+
+<script>
+/* Initial basket: per-stock weights (fraction of NAV; shorts negative). Overridden by config/trades in the database when present. */
+let TRADES = [
+ {id:1,  topic:"agent 入口", en:"Agent gateway",            w:{META:.06}},
+ {id:2,  topic:"券商利差", en:"Broker cash spread",              w:{IBKR:.08, SCHW:-.08}},
+ {id:3,  topic:"边缘网络 / agent 验证", en:"Edge network / agent verification",  w:{NET:.07}},
+ {id:4,  topic:"电商底座", en:"Commerce infrastructure",              w:{SHOP:.07}},
+ {id:5,  topic:"旅游：直订 vs OTA", en:"Travel: direct vs OTA",      w:{MAR:.04, HLT:.04, EXPE:-.04, TRIP:-.04}},
+ {id:6,  topic:"OTA 内部：BKNG vs EXPE", en:"Within OTAs: BKNG vs EXPE", w:{BKNG:.04, EXPE:-.04}},
+ {id:7,  topic:"车险：直销 vs 代理", en:"Auto insurance: direct vs agency",      w:{PGR:.05, ALL:-.05}},
+ {id:8,  topic:"订阅受损", en:"Subscription losers",              w:{SIRI:-.04, NYT:-.03, STRZ:-.03, AMCX:-.015, ZD:-.015}},
+ {id:9,  topic:"宽带续约定价", en:"Broadband renewal pricing",           w:{TMUS:.06, CMCSA:-.03, CHTR:-.03}},
+ {id:10, topic:"支付网络", en:"Payment networks",              w:{V:.03, MA:.03}},
+ {id:11, topic:"agent 身份与安全", en:"Agent identity & security",       w:{SAIL:.03, OKTA:.03, ZS:.03, RBRK:.015, NTSK:.015}},
+ {id:12, topic:"闲置现金", en:"Idle cash",              w:{FHI:.04, LPLA:-.04}},
+ {id:13, topic:"征信 vs 消费金融工具", en:"Credit data vs consumer finance tools",    w:{EFX:.04, EXPN:.015, GEN:-.04, INTU:-.015}},
+ {id:14, topic:"导流平台", en:"Lead-gen aggregators",              w:{NRDS:-.03, TREE:-.03, EVER:-.015, MAX:-.015}},
+ {id:15, topic:"训练数据", en:"Training data",              w:{INOD:.03}},
+ {id:16, topic:"agent 语音", en:"Agent voice",            w:{RNG:.03}},
+];
+let BASE_ASOF = "2026-09-22";
+const BENCH="SPY";
+let prices={}, log=[], startDate=null;
+
+const $=id=>document.getElementById(id);
+const pct=(x,d=2)=>(x==null||isNaN(x))?"–":(x>=0?"+":"")+(x*100).toFixed(d)+"%";
+const pp=x=>(x*100).toFixed(1)+"%";
+const cls=x=>x==null?"":(x>=0?"pos":"neg");
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* per-trade, per-stock weights in force after the close of `date`.
+   Log entry: {date, tradeId, ticker, from, to, action?, note?}; from/to are signed stock weights. */
+function bookAt(date){
+  const b={}; TRADES.forEach(t=>b[t.id]=Object.assign({},t.w));
+  log.forEach(e=>{ if(e.date<=date && e.tradeId!=null && e.ticker && e.to!=null){ (b[e.tradeId] ||= {})[e.ticker]=e.to; } });
+  return b;
+}
+function netWeights(book){ const w={}; for(const id in book) for(const k in book[id]) w[k]=(w[k]||0)+book[id][k]; return w; }
+function exposure(book){ let L=0,S=0; const w=netWeights(book); for(const k in w){ if(w[k]>0)L+=w[k]; else S-=w[k]; } return {L,S,net:L-S,n:Object.values(w).filter(x=>x).length}; }
+function allDates(){ const set=new Set(); Object.values(prices).forEach(m=>Object.keys(m).forEach(d=>set.add(d))); return [...set].sort(); }
+
+function compute(){
+  const ds=allDates().filter(d=>!startDate||d>=startDate);
+  if(ds.length<2) return null;
+  const ret=(k,i)=>{const m=prices[k]; if(!m)return null; const a=m[ds[i-1]],b=m[ds[i]]; return (a&&b)?b/a-1:null;};
+  const rows=[], contrib={}; TRADES.forEach(t=>contrib[t.id]=0);
+  let nav=1,bnav=1,peak=1,mdd=0; const hasB=!!prices[BENCH];
+  for(let i=1;i<ds.length;i++){
+    const book=bookAt(ds[i-1]); let r=0;
+    for(const id in book) for(const k in book[id]){ const x=ret(k,i); if(x!=null){ const c=book[id][k]*x; r+=c; contrib[id]=(contrib[id]||0)+c; } }
+    nav*=1+r; peak=Math.max(peak,nav); mdd=Math.min(mdd,nav/peak-1);
+    const br=hasB?ret(BENCH,i):null; if(br!=null) bnav*=1+br;
+    rows.push({date:ds[i],r,br,cum:nav-1,bcum:hasB?bnav-1:null});
+  }
+  return {base:ds[0],rows,contrib,mdd,hasB};
+}
+
+const I18N={
+ en:{title:"Agentic Reality Portfolio",vsSpy:"vs SPY",mdd:"Max drawdown",lsn:"Long / Short / Net",cumTitle:"Cumulative return",port:"Portfolio",
+   noData:"No data yet",noDataSub:"The chart appears once closing prices are loaded.",daily:"Daily returns",date:"Date",excess:"Excess",cum:"Cumulative",
+   attr:"Contribution by trade",holdings:"Holdings",theme:"Theme",positions:"Positions",gross:"Gross",contrib:"Contribution",bigStocks:"Stocks ≥ 5%",
+   ticker:"Ticker",side:"Side",weight:"Weight",activity:"Activity",action:"Action",change:"Change",note:"Note",
+   lastDay:"Last day",long:"Long",short:"Short",closed:"Closed",noBig:"No stock at 5% or more",add:"Add",trim:"Trim",adj:"Adjust",
+   all:"All",init:"Initial",initBasket:"Initial basket",dayRet:"Daily",contribTip:"Contribution",sep:", ",
+   sub:(b,n,l)=>`Since ${b} · ${n} trading days · data through ${l}`,
+   footer:"Method: position changes take effect after the close on the logged date; daily rebalance to target weights; price returns, excluding dividends, borrow and financing costs; missing prices count as zero return that day. Limits: each trade ≤ 20% gross; each stock 3%–8% net (secondary names from 1.5%). EXPN is London-listed and converted to USD. For research only, not investment advice."},
+ zh:{title:"Agentic Reality 组合",vsSpy:"相对 SPY",mdd:"最大回撤",lsn:"多 / 空 / 净",cumTitle:"累计收益",port:"组合",
+   noData:"暂无数据",noDataSub:"写入收盘价后自动生成。",daily:"每日收益",date:"日期",excess:"超额",cum:"累计",
+   attr:"收益贡献",holdings:"当前持仓",theme:"主题",positions:"标的",gross:"总仓位",contrib:"区间贡献",bigStocks:"个股（仓位 ≥ 5%）",
+   ticker:"代码",side:"方向",weight:"仓位",activity:"操作记录",action:"操作",change:"仓位变化",note:"备注",
+   lastDay:"最近一日",long:"多",short:"空",closed:"已清仓",noBig:"无仓位 ≥ 5% 的个股",add:"加仓",trim:"减仓",adj:"调整",
+   all:"全部",init:"建仓",initBasket:"初始组合",dayRet:"日收益",contribTip:"贡献",sep:"、",
+   sub:(b,n,l)=>`自 ${b} 以来，共 ${n} 个交易日，数据截至 ${l}`,
+   footer:"口径：仓位变动在记录日收盘后生效；每日再平衡到目标仓位；价格收益，不含分红、借券与融资成本；缺失价格当日按 0 收益计。仓位规则：单条交易总仓位 ≤ 20%，单只股票净仓位 3%–8%（次要标的最低 1.5%）；EXPN 为伦敦上市，需按美元计价。仅供研究，不构成投资建议。"}
+};
+let LANG="en"; try{ const v=localStorage.getItem("lang"); if(v==="zh"||v==="en") LANG=v; }catch(e){}
+const T=k=>I18N[LANG][k];
+const topicOf=t=>LANG==="en"?(t.en||t.topic):t.topic;
+function applyLang(){
+  document.documentElement.lang = LANG==="en"?"en":"zh-CN";
+  document.title = LANG==="en"?"Agentic Reality Portfolio":"Agentic Reality 组合";
+  document.querySelectorAll("[data-i]").forEach(el=>{ el.textContent=T(el.dataset.i); });
+  $("lEn").setAttribute("aria-pressed",LANG==="en"); $("lZh").setAttribute("aria-pressed",LANG==="zh");
+}
+function setLang(l){ LANG=l; try{localStorage.setItem("lang",l);}catch(e){} applyLang();
+  if(cumChart){ cumChart.data.datasets[0].label=T("port"); } render(); if(!allDates().length) renderStart(); }
+
+let cumChart,dayChart,attrChart;
+function makeCharts(){
+  Chart.defaults.font.family=css("--font")||"sans-serif"; Chart.defaults.font.size=12; Chart.defaults.color=css("--muted"); Chart.defaults.borderColor=css("--hair");
+  const tip={backgroundColor:"rgba(29,29,31,.92)",padding:10,cornerRadius:10,displayColors:false,titleFont:{weight:"600"}};
+  const xs={grid:{display:false},border:{display:false},ticks:{maxTicksLimit:8}};
+  const ys={grid:{color:css("--hair")},border:{display:false},ticks:{callback:v=>(v*100).toFixed(1)+"%",maxTicksLimit:5}};
+  const tk=v=>(v*100).toFixed(1)+"%";
+  cumChart=new Chart($("cumChart"),{type:"line",data:{labels:[],datasets:[
+    {label:I18N[LANG].port,data:[],borderColor:css("--port"),borderWidth:2.5,pointRadius:0,pointHoverRadius:4,tension:.15,fill:"origin",
+      backgroundColor:c=>{const {ctx,chartArea}=c.chart; if(!chartArea) return "transparent"; const g=ctx.createLinearGradient(0,chartArea.top,0,chartArea.bottom); g.addColorStop(0,"rgba(0,113,227,.16)"); g.addColorStop(1,"rgba(0,113,227,0)"); return g;}},
+    {label:"SPY",data:[],borderColor:css("--bench"),borderWidth:1.5,pointRadius:0,pointHoverRadius:3,tension:.15}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:"index",intersect:false},
+      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>`${c.dataset.label}  ${pct(c.parsed.y)}`}}},
+      scales:{y:ys,x:xs}}});
+  dayChart=new Chart($("dayChart"),{type:"bar",data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:3,maxBarThickness:14}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>`${T("dayRet")}  ${pct(c.parsed.y)}`}}},
+      scales:{y:{...ys,ticks:{...ys.ticks,maxTicksLimit:3}},x:{...xs,ticks:{display:false}}}}});
+  attrChart=new Chart($("attrChart"),{type:"bar",data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:4,barPercentage:.7}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>`${T("contribTip")}  ${pct(c.parsed.x)}`}}},
+      scales:{x:{...ys,ticks:{...ys.ticks}},y:{grid:{display:false},border:{display:false},ticks:{autoSkip:false,font:{size:12},color:css("--ink")}}}}});
+}
+
+function renderStart(){
+  const ds=allDates(), sel=$("startSel"); sel.innerHTML="";
+  if(ds.length<2){ sel.disabled=true; sel.innerHTML=`<option>${T("noData")}</option>`; startDate=null; return; }
+  sel.disabled=false;
+  ds.slice(0,-1).forEach(d=>{const o=document.createElement("option");o.value=o.textContent=d;sel.appendChild(o);});
+  const def=ds.includes(BASE_ASOF)?BASE_ASOF:ds[0];
+  if(!startDate||!ds.includes(startDate)) startDate=def;
+  sel.value=startDate;
+}
+function render(){
+  const res=compute(); const R=res?res.rows:[];
+  const lastDate = R.length?R[R.length-1].date:(allDates().slice(-1)[0]||BASE_ASOF);
+  const cur=bookAt(lastDate), e=exposure(cur);
+  $("sExp").textContent=`${pp(e.L)} / ${pp(e.S)} / ${pp(e.net)}`;
+  $("emptyMain").style.display=res?"none":"flex";
+
+  const set=(id,v,t)=>{$(id).textContent=t??pct(v);$(id).className="v "+cls(v);};
+  if(res){
+    const last=R[R.length-1];
+    $("subline").textContent=T("sub")(res.base,R.length,last.date);
+    $("sCum").textContent=pct(last.cum); $("sCum").className="big "+cls(last.cum); $("sDayK").textContent=`${T("lastDay")} ${last.date.slice(5)}`; set("sDay",last.r);
+    if(res.hasB) set("sEx",last.cum-last.bcum); else {$("sEx").textContent="–";$("sEx").className="v";}
+    set("sDD",res.mdd,res.mdd===0?"0.00%":pct(res.mdd));
+  } else {
+    $("subline").textContent=""; $("sDayK").textContent=T("lastDay"); ["sDay","sEx","sDD"].forEach(i=>{$(i).textContent="–";$(i).className="v";}); $("sCum").textContent="–"; $("sCum").className="big";
+  }
+
+  cumChart.data.labels=res?[res.base,...R.map(r=>r.date)]:[];
+  cumChart.data.datasets[0].data=res?[0,...R.map(r=>r.cum)]:[];
+  cumChart.data.datasets[1].data=res&&res.hasB?[0,...R.map(r=>r.bcum)]:[];
+  cumChart.update();
+  dayChart.data.labels=R.map(r=>r.date); dayChart.data.datasets[0].data=R.map(r=>r.r);
+  dayChart.data.datasets[0].backgroundColor=R.map(r=>r.r>=0?css("--gain"):css("--loss")); dayChart.update();
+
+  const items=TRADES.map(t=>({l:`${t.id} ${topicOf(t)}`,v:res?res.contrib[t.id]:0})).filter(i=>res).sort((a,b)=>b.v-a.v);
+  attrChart.data.labels=items.map(i=>i.l); attrChart.data.datasets[0].data=items.map(i=>i.v);
+  attrChart.data.datasets[0].backgroundColor=items.map(i=>i.v>=0?css("--gain"):css("--loss")); attrChart.update();
+
+  $("dailyTbl").tBodies[0].innerHTML=R.length?R.slice().reverse().map(r=>{const ex=r.br==null?null:r.r-r.br;
+    return `<tr><td>${r.date}</td><td class="num ${cls(r.r)}">${pct(r.r)}</td><td class="num ${cls(r.br)}">${pct(r.br)}</td><td class="num ${cls(ex)}">${pct(ex)}</td><td class="num ${cls(r.cum)}">${pct(r.cum)}</td></tr>`;}).join("")
+    :`<tr><td colspan="5" class="muted">${T("noData")}</td></tr>`;
+
+  const grossOf=id=>Object.values(cur[id]||{}).reduce((a,x)=>a+Math.abs(x),0);
+  $("posTbl").tBodies[0].innerHTML=TRADES.slice().sort((a,b)=>grossOf(b.id)-grossOf(a.id)||a.id-b.id).map(t=>{
+    const w=cur[t.id]||{}; const ks=Object.keys(w).filter(k=>w[k]);
+    const longs=ks.filter(k=>w[k]>0).map(k=>`${esc(k)} ${pp(w[k])}`), shorts=ks.filter(k=>w[k]<0).map(k=>`${esc(k)} ${pp(-w[k])}`);
+    const names=[longs.length?`<span class="l">${T("long")} ${longs.join(T("sep"))}</span>`:"",shorts.length?`<span class="s">${T("short")} ${shorts.join(T("sep"))}</span>`:""].filter(Boolean).join("<br>");
+    const gross=ks.reduce((a,k)=>a+Math.abs(w[k]),0); const c=res?res.contrib[t.id]:null;
+    return `<tr${gross?"":" style='opacity:.5'"}><td>${t.id}</td><td>${esc(topicOf(t))}</td><td class="wrapc">${names||T("closed")}</td><td class="num">${pp(gross)}</td><td class="num ${cls(c)}">${pct(c)}</td></tr>`;}).join("");
+  const nw=netWeights(cur), src={};
+  for(const id in cur) for(const k in cur[id]) if(cur[id][k]) (src[k] ||= []).push(id);
+  const big=Object.entries(nw).filter(([k,v])=>Math.abs(v)>=.05-1e-9).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+  $("stkTbl").tBodies[0].innerHTML=big.length?big.map(([k,v])=>`<tr><td>${esc(k)}</td><td class="${v>0?"l":"s"}">${v>0?T("long"):T("short")}</td><td class="num">${pp(Math.abs(v))}</td><td class="wrapc">${src[k].map(id=>{const t=TRADES.find(t=>t.id==id);return esc(t?`${t.id} ${topicOf(t)}`:id);}).join(T("sep"))}</td></tr>`).join("")
+    :`<tr><td colspan="4" class="muted">${T("noBig")}</td></tr>`;
+  const tname=id=>{const t=TRADES.find(t=>t.id==id); return t?`${t.id} ${topicOf(t)}`:(id??"");};
+  $("logTbl").tBodies[0].innerHTML=log.length?log.slice().reverse().map(e=>{
+    const up = e.from!=null&&e.to!=null ? Math.abs(e.to)>Math.abs(e.from) : null;
+    const act = (LANG==="en"?e.action_en:e.action) || (up==null?T("adj"):up?T("add"):T("trim"));
+    const chg = e.from!=null&&e.to!=null ? `${esc(e.ticker||"")} ${pp(Math.abs(e.from))} → ${pp(Math.abs(e.to))}` : esc(e.ticker||"");
+    return `<tr><td>${esc(e.date)}</td><td>${esc(tname(e.tradeId))}</td><td class="${up==null?"":up?"act-up":"act-down"}">${esc(act)}</td><td class="num">${chg}</td><td class="wrapc">${esc((LANG==="en"?(e.note_en||e.note):e.note)||"")}</td></tr>`;}).join("")
+    :`<tr><td>${esc(BASE_ASOF)}</td><td>${T("all")}</td><td><span class="tag">${T("init")}</span></td><td class="num">${T("initBasket")}</td><td class="wrapc"></td></tr>`;
+}
+
+$("startSel").addEventListener("change",e=>{startDate=e.target.value;render();});
+$("lEn").addEventListener("click",()=>setLang("en"));
+$("lZh").addEventListener("click",()=>setLang("zh"));
+applyLang();
+makeCharts(); renderStart(); render();
+
+/* Load data from static JSON files */
+(async()=>{
+  const [p, f] = await Promise.all([
+    fetch("data/prices.json", {cache:"no-store"}).then(r=>r.json()),
+    fetch("data/portfolio.json", {cache:"no-store"}).then(r=>r.json())
+  ]);
+  prices = p.prices || {};
+  if (Array.isArray(f.trades) && f.trades.length) TRADES = f.trades;
+  if (f.asof) BASE_ASOF = f.asof;
+  log = (f.log || []).slice().sort((a,b)=>(a.date+(a.ts||"")).localeCompare(b.date+(b.ts||"")));
+  renderStart(); render();
+})().catch(()=>{ /* keep the empty state */ });
+</script>
+</body>
+</html>

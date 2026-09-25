@@ -1,0 +1,22 @@
+{
+  "asof": "2026-09-22",
+  "trades": [
+    {"id":1,  "topic":"agent 入口", "en":"Agent gateway",                        "w":{"META":0.06}},
+    {"id":2,  "topic":"券商利差", "en":"Broker cash spread",                        "w":{"IBKR":0.08, "SCHW":-0.08}},
+    {"id":3,  "topic":"边缘网络 / agent 验证", "en":"Edge network / agent verification",  "w":{"NET":0.07}},
+    {"id":4,  "topic":"电商底座", "en":"Commerce infrastructure",                    "w":{"SHOP":0.07}},
+    {"id":5,  "topic":"旅游：直订 vs OTA", "en":"Travel: direct vs OTA",              "w":{"MAR":0.04, "HLT":0.04, "EXPE":-0.04, "TRIP":-0.04}},
+    {"id":6,  "topic":"OTA 内部：BKNG vs EXPE", "en":"Within OTAs: BKNG vs EXPE",      "w":{"BKNG":0.04, "EXPE":-0.04}},
+    {"id":7,  "topic":"车险：直销 vs 代理", "en":"Auto insurance: direct vs agency",      "w":{"PGR":0.05, "ALL":-0.05}},
+    {"id":8,  "topic":"订阅受损", "en":"Subscription losers",                        "w":{"SIRI":-0.04, "NYT":-0.03, "STRZ":-0.03, "AMCX":-0.015, "ZD":-0.015}},
+    {"id":9,  "topic":"宽带续约定价", "en":"Broadband renewal pricing",                "w":{"TMUS":0.06, "CMCSA":-0.03, "CHTR":-0.03}},
+    {"id":10, "topic":"支付网络", "en":"Payment networks",                            "w":{"V":0.03, "MA":0.03}},
+    {"id":11, "topic":"agent 身份与安全", "en":"Agent identity & security",            "w":{"SAIL":0.03, "OKTA":0.03, "ZS":0.03, "RBRK":0.015, "NTSK":0.015}},
+    {"id":12, "topic":"闲置现金", "en":"Idle cash",                                    "w":{"FHI":0.04, "LPLA":-0.04}},
+    {"id":13, "topic":"征信 vs 消费金融工具", "en":"Credit data vs consumer finance tools", "w":{"EFX":0.04, "EXPN":0.015, "GEN":-0.04, "INTU":-0.015}},
+    {"id":14, "topic":"导流平台", "en":"Lead-gen aggregators",                        "w":{"NRDS":-0.03, "TREE":-0.03, "EVER":-0.015, "MAX":-0.015}},
+    {"id":15, "topic":"训练数据", "en":"Training data",                                "w":{"INOD":0.03}},
+    {"id":16, "topic":"agent 语音", "en":"Agent voice",                              "w":{"RNG":0.03}}
+  ],
+  "log": []
+}
