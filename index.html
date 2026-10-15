@@ -61,7 +61,7 @@ select:hover{border-color:var(--accent)}
 @media (max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}}
 
 /* cards */
-.card{background:var(--card);border:1px solid var(--hair);padding:28px;margin-bottom:16px;position:relative}
+.card{background:var(--card);border:1px solid var(--hair);padding:28px;margin-bottom:16px;position:relative;overflow:visible}
 .card::before,.card::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--accent);pointer-events:none}
 .card::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid}
 .card::after{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid}
@@ -80,7 +80,7 @@ body{overflow-x:hidden}
 .empty strong{color:var(--ink);font-size:15px;font-weight:600;font-family:var(--sans)}
 
 /* tables */
-.tbl{overflow-x:auto;margin-top:14px}
+.tbl{overflow-x:auto;overflow-y:visible;margin-top:14px}
 .scroll{max-height:380px;overflow:auto}
 table{border-collapse:collapse;width:100%;font-size:12px}
 th,td{padding:10px 8px;text-align:left;white-space:nowrap;border-bottom:1px dashed var(--hair)}
