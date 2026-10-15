@@ -21,17 +21,21 @@
 ::selection{background-color:var(--accent);color:#fff}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.6;
   -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;letter-spacing:0}
-.wrap{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
+.wrap{max-width:1080px;margin:0 auto;padding:60px 24px 80px;position:relative;z-index:1}
 :focus-visible{outline:1px solid var(--accent);outline-offset:3px}
 .muted{color:var(--muted);font-size:12px}
 .pos{color:var(--gain)} .neg{color:var(--loss)}
 
 /* hero */
-.hero{margin-bottom:24px}
-.hero-title{font-size:clamp(28px,5vw,52px);font-weight:700;letter-spacing:-.04em;line-height:1;margin:0 0 20px;
-  text-transform:uppercase;color:#fff;font-family:var(--sans);display:flex;justify-content:space-between;white-space:nowrap}
-.hero-title span{display:block}
-.eyebrow-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.hero{margin-bottom:24px;position:relative}
+.hero-bg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:clamp(60px,10vw,120px);font-weight:700;letter-spacing:-.04em;line-height:1.1;
+  text-transform:uppercase;color:transparent;font-family:var(--sans);
+  -webkit-text-stroke:1px rgba(255,255,255,.06);
+  text-align:center;white-space:nowrap;pointer-events:none;z-index:0;
+  display:flex;flex-direction:column;align-items:center}
+.hero-bg span{display:block}
+.eyebrow-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
 h1{font-size:11px;font-weight:600;margin:0;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-family:var(--sans);display:none}
 select{appearance:none;-webkit-appearance:none;font:inherit;font-size:11px;color:var(--ink);background:var(--pill);border:1px solid var(--muted);border-radius:0;
   padding:5px 28px 5px 10px;cursor:pointer;font-family:var(--mono);
@@ -99,7 +103,7 @@ footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-
 <body>
 <div class="wrap">
   <section class="hero">
-    <div class="hero-title" data-i-title><span>David's</span><span>Agentic</span><span>Portfolio</span></div>
+    <div class="hero-bg" data-i-title><span>David's</span><span>Agentic</span><span>Portfolio</span></div>
     <div class="eyebrow-row">
       <div class="big-wrap"><div class="big" id="sCum">–</div></div>
       <div class="ctrls">
@@ -253,6 +257,7 @@ function applyLang(){
   document.querySelectorAll("[data-i]").forEach(el=>{ el.textContent=T(el.dataset.i); });
   const ht=document.querySelector("[data-i-title]");
   if(ht){ht.innerHTML=LANG==="en"?"<span>David's</span><span>Agentic</span><span>Portfolio</span>":"<span>David's</span><span>Agentic</span><span>组合</span>";}
+
   $("lEn").setAttribute("aria-pressed",LANG==="en"); $("lZh").setAttribute("aria-pressed",LANG==="zh");
 }
 function applyMode(){
