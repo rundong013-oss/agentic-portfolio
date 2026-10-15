@@ -1,22 +1,138 @@
 {
   "asof": "2026-09-15",
   "trades": [
-    {"id":1,  "topic":"agent 入口", "en":"Agent gateway",                        "w":{"META":0.06}},
-    {"id":2,  "topic":"券商利差", "en":"Broker cash spread",                        "w":{"IBKR":0.08, "SCHW":-0.08}},
-    {"id":3,  "topic":"边缘网络 / agent 验证", "en":"Edge network / agent verification",  "w":{"NET":0.07}},
-    {"id":4,  "topic":"电商底座", "en":"Commerce infrastructure",                    "w":{"SHOP":0.07}},
-    {"id":5,  "topic":"旅游：直订 vs OTA", "en":"Travel: direct vs OTA",              "w":{"MAR":0.04, "HLT":0.04, "EXPE":-0.04, "TRIP":-0.04}},
-    {"id":6,  "topic":"OTA 内部：BKNG vs EXPE", "en":"Within OTAs: BKNG vs EXPE",      "w":{"BKNG":0.04, "EXPE":-0.04}},
-    {"id":7,  "topic":"车险：直销 vs 代理", "en":"Auto insurance: direct vs agency",      "w":{"PGR":0.05, "ALL":-0.05}},
-    {"id":8,  "topic":"订阅受损", "en":"Subscription losers",                        "w":{"SIRI":-0.04, "NYT":-0.03, "STRZ":-0.03, "AMCX":-0.015, "ZD":-0.015}},
-    {"id":9,  "topic":"宽带续约定价", "en":"Broadband renewal pricing",                "w":{"TMUS":0.06, "CMCSA":-0.03, "CHTR":-0.03}},
-    {"id":10, "topic":"支付网络", "en":"Payment networks",                            "w":{"V":0.03, "MA":0.03}},
-    {"id":11, "topic":"agent 身份与安全", "en":"Agent identity & security",            "w":{"SAIL":0.03, "OKTA":0.03, "ZS":0.03, "RBRK":0.015, "NTSK":0.015}},
-    {"id":12, "topic":"闲置现金", "en":"Idle cash",                                    "w":{"FHI":0.04, "LPLA":-0.04}},
-    {"id":13, "topic":"征信 vs 消费金融工具", "en":"Credit data vs consumer finance tools", "w":{"EFX":0.04, "EXPN":0.015, "GEN":-0.04, "INTU":-0.015}},
-    {"id":14, "topic":"导流平台", "en":"Lead-gen aggregators",                        "w":{"NRDS":-0.03, "TREE":-0.03, "EVER":-0.015, "MAX":-0.015}},
-    {"id":15, "topic":"训练数据", "en":"Training data",                                "w":{"INOD":0.03}},
-    {"id":16, "topic":"agent 语音", "en":"Agent voice",                              "w":{"RNG":0.03}}
+    {
+      "id": 1,
+      "topic": "agent \u5165\u53e3",
+      "en": "Agent gateway",
+      "w": {
+        "META": 0.0689
+      }
+    },
+    {
+      "id": 2,
+      "topic": "\u5238\u5546\u5229\u5dee",
+      "en": "Broker cash spread",
+      "w": {
+        "IBKR": 0.0919,
+        "SCHW": -0.0919
+      }
+    },
+    {
+      "id": 3,
+      "topic": "\u8fb9\u7f18\u7f51\u7edc / agent \u9a8c\u8bc1",
+      "en": "Edge network / agent verification",
+      "w": {
+        "NET": 0.0804
+      }
+    },
+    {
+      "id": 4,
+      "topic": "\u7535\u5546\u5e95\u5ea7",
+      "en": "Commerce infrastructure",
+      "w": {
+        "SHOP": 0.0804
+      }
+    },
+    {
+      "id": 5,
+      "topic": "\u65c5\u6e38\uff1a\u76f4\u8ba2 vs OTA",
+      "en": "Travel: direct vs OTA",
+      "w": {
+        "MAR": 0.0459,
+        "HLT": 0.0459,
+        "EXPE": -0.0459,
+        "TRIP": -0.0459
+      }
+    },
+    {
+      "id": 6,
+      "topic": "OTA \u5185\u90e8\uff1aBKNG vs EXPE",
+      "en": "Within OTAs: BKNG vs EXPE",
+      "w": {
+        "BKNG": 0.0459,
+        "EXPE": -0.0459
+      }
+    },
+    {
+      "id": 7,
+      "topic": "\u8f66\u9669\uff1a\u76f4\u9500 vs \u4ee3\u7406",
+      "en": "Auto insurance: direct vs agency",
+      "w": {
+        "PGR": 0.0574,
+        "ALL": -0.0574
+      }
+    },
+    {
+      "id": 8,
+      "topic": "\u8ba2\u9605\u53d7\u635f",
+      "en": "Subscription losers",
+      "w": {
+        "SIRI": -0.0459,
+        "NYT": -0.0345,
+        "STRZ": -0.0345,
+        "AMCX": -0.0172,
+        "ZD": -0.0172
+      }
+    },
+    {
+      "id": 9,
+      "topic": "\u5bbd\u5e26\u7eed\u7ea6\u5b9a\u4ef7",
+      "en": "Broadband renewal pricing",
+      "w": {
+        "TMUS": 0.0689,
+        "CMCSA": -0.0345,
+        "CHTR": -0.0345
+      }
+    },
+    {
+      "id": 10,
+      "topic": "\u652f\u4ed8\u7f51\u7edc",
+      "en": "Payment networks",
+      "w": {
+        "V": 0.0345,
+        "MA": 0.0345
+      }
+    },
+    {
+      "id": 11,
+      "topic": "agent \u8eab\u4efd\u4e0e\u5b89\u5168",
+      "en": "Agent identity & security",
+      "w": {
+        "SAIL": 0.0345,
+        "OKTA": 0.0345,
+        "ZS": 0.0345,
+        "RBRK": 0.0172,
+        "NTSK": 0.0172
+      }
+    },
+    {
+      "id": 14,
+      "topic": "\u5bfc\u6d41\u5e73\u53f0",
+      "en": "Lead-gen aggregators",
+      "w": {
+        "NRDS": -0.0345,
+        "TREE": -0.0345,
+        "EVER": -0.0172,
+        "MAX": -0.0172
+      }
+    },
+    {
+      "id": 15,
+      "topic": "\u8bad\u7ec3\u6570\u636e",
+      "en": "Training data",
+      "w": {
+        "INOD": 0.0345
+      }
+    },
+    {
+      "id": 16,
+      "topic": "agent \u8bed\u97f3",
+      "en": "Agent voice",
+      "w": {
+        "RNG": 0.0345
+      }
+    }
   ],
   "log": []
 }
