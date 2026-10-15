@@ -30,7 +30,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font
 .hero{margin-bottom:24px;position:relative}
 .hero-bg{font-size:clamp(40px,7vw,90px);font-weight:700;letter-spacing:-.04em;line-height:1;
   text-transform:uppercase;color:transparent;font-family:var(--sans);
-  -webkit-text-stroke:1.5px rgba(255,255,255,.12);
+  -webkit-text-stroke:1.5px #fff;
   white-space:nowrap;pointer-events:none;
   display:flex;justify-content:center;gap:.3em;margin:8px 0}
 .hero-bg span{display:block}
@@ -98,13 +98,14 @@ td.wrapc .l{color:var(--ink)} td.wrapc .s{color:var(--ink)}
 .subh:first-of-type{margin-top:20px}
 /* trade logic tooltip */
 .tip-wrap{position:relative;cursor:help;border-bottom:1px dashed var(--accent)}
-.tip-wrap .tip{display:none;position:absolute;left:0;bottom:calc(100% + 8px);width:min(420px,80vw);
-  background:#1A1A1A;border:1px solid var(--accent);padding:14px 16px;z-index:99;
+.tip-wrap .tip{display:none;position:absolute;left:0;top:calc(100% + 8px);width:min(420px,80vw);
+  background:#1A1A1A;border:1px solid var(--accent);padding:14px 16px;z-index:999;
   font-size:12px;line-height:1.65;color:#fff;font-family:var(--mono);white-space:normal;
   pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)}
-.tip-wrap .tip::before{content:'';position:absolute;bottom:-6px;left:16px;
-  width:10px;height:10px;background:#1A1A1A;border-right:1px solid var(--accent);border-bottom:1px solid var(--accent);
+.tip-wrap .tip::before{content:'';position:absolute;top:-6px;left:16px;
+  width:10px;height:10px;background:#1A1A1A;border-left:1px solid var(--accent);border-top:1px solid var(--accent);
   transform:rotate(45deg)}
+.tip-wrap .tip-title{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;font-family:var(--sans);margin-bottom:8px}
 .tip-wrap:hover .tip{display:block}
 footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-align:center;line-height:1.7;border-top:1px dashed var(--hair);padding-top:24px}
 </style>
@@ -386,7 +387,8 @@ function render(){
     const names=[longs.length?`<span class="l">${T("long")} ${longs.join(T("sep"))}</span>`:"",shorts.length?`<span class="s">${T("short")} ${shorts.join(T("sep"))}</span>`:""].filter(Boolean).join("<br>");
     const gross=ks.reduce((a,k)=>a+Math.abs(w[k]),0); const c=res?res.contrib[t.id]:null;
     const logic=TRADE_LOGIC[t.id]; const logicTxt=logic?(LANG==="en"?logic.en:logic.zh):"";
-    const nameTd=logicTxt?`<span class="tip-wrap">${esc(topicOf(t))}<span class="tip">${esc(logicTxt)}</span></span>`:`${esc(topicOf(t))}`;
+    const tipLabel=LANG==="en"?"Trade Logic":"投资逻辑";
+    const nameTd=logicTxt?`<span class="tip-wrap">${esc(topicOf(t))}<span class="tip"><div class="tip-title">${tipLabel}</div>${esc(logicTxt)}</span></span>`:`${esc(topicOf(t))}`;
     return `<tr${gross?"":" style='opacity:.4'"}><td>${t.id}</td><td>${nameTd}</td><td class="wrapc">${names||T("closed")}</td><td class="num">${pp(gross)}</td><td class="num ${cls(c)}">${pct(c)}</td></tr>`;}).join("");
   const nw=netWeights(cur), src={};
   for(const id in cur) for(const k in cur[id]) if(cur[id][k]) (src[k] ||= []).push(id);
