@@ -28,13 +28,14 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font
 
 /* hero */
 .hero{margin-bottom:24px;position:relative}
-.hero-bg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-size:clamp(60px,10vw,120px);font-weight:700;letter-spacing:-.04em;line-height:1.1;
-  text-transform:uppercase;color:transparent;font-family:var(--sans);
-  -webkit-text-stroke:1px rgba(255,255,255,.06);
-  text-align:center;white-space:nowrap;pointer-events:none;z-index:0;
-  display:flex;flex-direction:column;align-items:center}
+.hero-mid{position:relative;display:flex;align-items:center;justify-content:center;min-height:clamp(50px,8vw,100px);margin:8px 0}
+.hero-bg{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+  font-size:clamp(40px,7vw,90px);font-weight:700;letter-spacing:-.04em;line-height:1;
+  text-transform:uppercase;color:rgba(255,255,255,.07);font-family:var(--sans);
+  white-space:nowrap;pointer-events:none;z-index:0;
+  display:flex;justify-content:space-between}
 .hero-bg span{display:block}
+.hero-mid .subline{position:relative;z-index:1}
 .eyebrow-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
 h1{font-size:11px;font-weight:600;margin:0;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-family:var(--sans);display:none}
 select{appearance:none;-webkit-appearance:none;font:inherit;font-size:11px;color:var(--ink);background:var(--pill);border:1px solid var(--muted);border-radius:0;
@@ -103,7 +104,6 @@ footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-
 <body>
 <div class="wrap">
   <section class="hero">
-    <div class="hero-bg" data-i-title><span>David's</span><span>Agentic</span><span>Portfolio</span></div>
     <div class="eyebrow-row">
       <div class="big-wrap"><div class="big" id="sCum">–</div></div>
       <div class="ctrls">
@@ -112,7 +112,10 @@ footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-
         <select id="startSel" aria-label="Start date"></select>
       </div>
     </div>
-    <div class="subline" id="subline"></div>
+    <div class="hero-mid">
+      <div class="hero-bg" data-i-title><span>David's</span><span>Agentic</span><span>Portfolio</span></div>
+      <div class="subline" id="subline"></div>
+    </div>
     <div class="metrics" aria-label="Key metrics">
       <div class="metric"><div class="k" id="sDayK"></div><div class="v" id="sDay">–</div></div>
       <div class="metric"><div class="k" data-i="vsSpy"></div><div class="v" id="sEx">–</div></div>
