@@ -269,10 +269,29 @@ function makeCharts(){
   const tip={backgroundColor:"rgba(26,26,26,.95)",borderColor:'rgba(191,109,21,.4)',borderWidth:1,padding:10,cornerRadius:0,displayColors:false,titleFont:{weight:"600",family:css("--mono")||"monospace"},bodyFont:{family:css("--mono")||"monospace"}};
   const xs={grid:{display:false},border:{display:false},ticks:{maxTicksLimit:8,font:{family:css("--mono")||"monospace"}}};
   const ys={grid:{color:'rgba(85,85,85,.25)',drawTicks:false},border:{display:false,dash:[4,4]},ticks:{callback:v=>(v*100).toFixed(1)+"%",maxTicksLimit:5,font:{family:css("--mono")||"monospace"}}};
+  const revealPlugin={
+    id:'reveal',
+    beforeDraw(chart){
+      const p=chart._revealP; if(p==null||p>=1) return;
+      const {ctx,chartArea:a}=chart; if(!a) return;
+      ctx.save(); ctx.beginPath();
+      ctx.rect(a.left,a.top-10,(a.right-a.left)*p,a.bottom-a.top+20);
+      ctx.clip();
+    },
+    afterDraw(chart){
+      if(chart._revealP!=null&&chart._revealP<1) chart.ctx.restore();
+    }
+  };
+  const cumFillBg=c=>{
+    const {ctx,chartArea}=c.chart; if(!chartArea) return "transparent";
+    const opacity=c.chart._fillOpacity||0;
+    const g=ctx.createLinearGradient(0,chartArea.top,0,chartArea.bottom);
+    g.addColorStop(0,`rgba(191,109,21,${0.2*opacity})`); g.addColorStop(1,"rgba(191,109,21,0)"); return g;
+  };
   cumChart=new Chart($("cumChart"),{type:"line",data:{labels:[],datasets:[
-    {label:I18N[LANG].port,data:[],borderColor:css("--port"),borderWidth:2,pointRadius:0,pointHoverRadius:3,tension:.15,fill:"origin",
-      backgroundColor:c=>{const {ctx,chartArea}=c.chart; if(!chartArea) return "transparent"; const g=ctx.createLinearGradient(0,chartArea.top,0,chartArea.bottom); g.addColorStop(0,"rgba(191,109,21,.2)"); g.addColorStop(1,"rgba(191,109,21,0)"); return g;}},
+    {label:I18N[LANG].port,data:[],borderColor:css("--port"),borderWidth:2,pointRadius:0,pointHoverRadius:3,tension:.15,fill:"origin",backgroundColor:cumFillBg},
     {label:"SPY",data:[],borderColor:css("--bench"),borderWidth:1,pointRadius:0,pointHoverRadius:3,tension:.15,borderDash:[4,4]}]},
+    plugins:[revealPlugin],
     options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:"index",intersect:false},
       plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>`${c.dataset.label}  ${pct(c.parsed.y)}`}}},
       scales:{y:ys,x:xs}}});
@@ -381,8 +400,33 @@ makeCharts(); renderStart(); render();
   if (Array.isArray(f.trades) && f.trades.length) TRADES = f.trades;
   if (f.asof) BASE_ASOF = f.asof;
   log = (f.log || []).slice().sort((a,b)=>(a.date+(a.ts||"")).localeCompare(b.date+(b.ts||"")));
-  renderStart(); render();
+  renderStart(); render(); animateCumChart();
 })().catch(()=>{});
+
+function animateCumChart(){
+  if(!cumChart||!cumChart.data.labels.length) return;
+  cumChart._revealP=0; cumChart._fillOpacity=0; cumChart.update("none");
+  const dur=1200, fillDur=600; const t0=performance.now();
+  function step(now){
+    const elapsed=now-t0;
+    if(elapsed<dur){
+      cumChart._revealP=Math.min(elapsed/dur,1);
+      cumChart.update("none");
+      requestAnimationFrame(step);
+    } else {
+      cumChart._revealP=1; cumChart.update("none");
+      const t1=performance.now();
+      function fadeIn(now2){
+        const e2=now2-t1;
+        cumChart._fillOpacity=Math.min(e2/fillDur,1);
+        cumChart.update("none");
+        if(e2<fillDur) requestAnimationFrame(fadeIn);
+      }
+      requestAnimationFrame(fadeIn);
+    }
+  }
+  requestAnimationFrame(step);
+}
 </script>
 </body>
 </html>
