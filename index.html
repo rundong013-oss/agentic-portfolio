@@ -42,7 +42,11 @@ select:hover{border-color:var(--accent)}
 .seg button:not(:last-child){border-right:1px solid var(--muted)}
 .seg button:hover{color:var(--ink)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:600}
-.big{font-size:clamp(40px,8vw,72px);font-weight:700;letter-spacing:-.03em;line-height:1;margin:0;font-family:var(--sans)}
+.big-wrap{perspective:800px;perspective-origin:center center}
+.big{font-size:clamp(40px,8vw,72px);font-weight:700;letter-spacing:-.03em;line-height:1;margin:0;font-family:var(--sans);
+  -webkit-text-stroke:1.5px #fff;color:transparent;transform-style:preserve-3d;will-change:transform;transition:color .3s}
+.big.pos{-webkit-text-stroke-color:var(--gain);color:transparent}
+.big.neg{-webkit-text-stroke-color:var(--loss);color:transparent}
 .subline{font-size:12px;color:var(--muted);min-height:20px;font-family:var(--mono)}
 
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);margin:32px 0 0;gap:1px;background:var(--hair)}
@@ -95,7 +99,7 @@ footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-
   <section class="hero">
     <div class="hero-title" data-i-title><span>David's</span><span>Agentic</span><span>Portfolio</span></div>
     <div class="eyebrow-row">
-      <div class="big" id="sCum">–</div>
+      <div class="big-wrap"><div class="big" id="sCum">–</div></div>
       <div class="ctrls">
         <div class="seg" role="group" aria-label="Mode"><button id="mLS" type="button">L/S</button><button id="mLO" type="button" data-i="longOnly"></button></div>
         <div class="seg" role="group" aria-label="Language"><button id="lEn" type="button">EN</button><button id="lZh" type="button">中文</button></div>
@@ -350,6 +354,21 @@ $("mLS").addEventListener("click",()=>setMode("ls"));
 $("mLO").addEventListener("click",()=>setMode("lo"));
 applyLang(); applyMode();
 makeCharts(); renderStart(); render();
+
+/* 3D scroll rotation for the big number */
+(function(){
+  const el=$("sCum");
+  let ticking=false;
+  window.addEventListener("scroll",()=>{
+    if(!ticking){requestAnimationFrame(()=>{
+      const y=window.scrollY;
+      const rot=(y*0.15)%360;
+      const tiltX=Math.sin(y*0.003)*8;
+      el.style.transform=`rotateY(${rot}deg) rotateX(${tiltX}deg)`;
+      ticking=false;
+    });ticking=true;}
+  },{passive:true});
+})();
 
 (async()=>{
   const [p, f] = await Promise.all([
