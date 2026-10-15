@@ -29,7 +29,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font
 /* hero */
 .hero{margin-bottom:24px;position:relative}
 .hero-bg{font-size:clamp(40px,7vw,90px);font-weight:700;letter-spacing:-.04em;line-height:1;
-  text-transform:uppercase;color:rgba(255,255,255,.07);font-family:var(--sans);
+  text-transform:uppercase;color:transparent;font-family:var(--sans);
+  -webkit-text-stroke:1.5px rgba(255,255,255,.12);
   white-space:nowrap;pointer-events:none;
   display:flex;justify-content:center;gap:.3em;margin:8px 0}
 .hero-bg span{display:block}
@@ -386,8 +387,8 @@ makeCharts(); renderStart(); render();
   window.addEventListener("scroll",()=>{
     if(!ticking){requestAnimationFrame(()=>{
       const y=window.scrollY;
-      const rot=(y*0.45)%360;
-      const tiltX=Math.sin(y*0.009)*8;
+      const rot=(y*0.3)%360;
+      const tiltX=Math.sin(y*0.006)*8;
       el.style.transform=`rotateY(${rot}deg) rotateX(${tiltX}deg)`;
       ticking=false;
     });ticking=true;}
