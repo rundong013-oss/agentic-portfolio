@@ -40,7 +40,7 @@ select{appearance:none;-webkit-appearance:none;font:inherit;font-size:13px;color
   padding:6px 30px 6px 14px;cursor:pointer;
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
   background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px;background-repeat:no-repeat}
-.ctrls{display:flex;gap:10px;align-items:center}
+.ctrls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .seg{display:inline-flex;background:var(--pill);border-radius:980px;padding:2px}
 .seg button{font:inherit;font-size:12px;border:0;background:transparent;color:var(--muted);padding:4px 12px;border-radius:980px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
@@ -96,7 +96,12 @@ footer{color:var(--muted);font-size:12px;margin:32px auto 0;max-width:80ch;text-
   <section class="hero">
     <div class="eyebrow-row">
       <h1 data-i="title"></h1>
-      <div class="ctrls"><div class="seg" role="group" aria-label="Mode"><button id="mLS" type="button">L/S</button><button id="mLO" type="button" data-i="longOnly"></button></div><div class="seg" role="group" aria-label="Language"><button id="lEn" type="button">EN</button><button id="lZh" type="button">中文</button></div><select id="startSel" aria-label="Start date"></select></div>
+      <div class="ctrls">
+        <div class="seg" role="group" aria-label="Mode"><button id="mLS" type="button">L/S</button><button id="mLO" type="button" data-i="longOnly"></button></div>
+        <div class="seg" role="group" aria-label="Start"><button id="d22" type="button">9/22</button><button id="d15" type="button">9/15</button></div>
+        <div class="seg" role="group" aria-label="Language"><button id="lEn" type="button">EN</button><button id="lZh" type="button">中文</button></div>
+        <select id="startSel" aria-label="Start date"></select>
+      </div>
     </div>
     <div class="big" id="sCum">–</div>
     <div class="subline" id="subline"></div>
@@ -252,9 +257,14 @@ function applyMode(){
   $("mLS").setAttribute("aria-pressed",MODE==="ls");
   $("mLO").setAttribute("aria-pressed",MODE==="lo");
 }
+function applyDatePreset(){
+  $("d22").setAttribute("aria-pressed",startDate==="2026-09-22");
+  $("d15").setAttribute("aria-pressed",startDate==="2026-09-15");
+}
 function setLang(l){ LANG=l; try{localStorage.setItem("lang",l);}catch(e){} applyLang(); applyMode();
   if(cumChart){ cumChart.data.datasets[0].label=T("port"); } render(); if(!allDates().length) renderStart(); }
 function setMode(m){ MODE=m; applyMode(); render(); }
+function setStart(d){ startDate=d; $("startSel").value=d; applyDatePreset(); render(); }
 
 let cumChart,dayChart,attrChart;
 function makeCharts(){
@@ -288,6 +298,7 @@ function renderStart(){
   const def=ds.includes(BASE_ASOF)?BASE_ASOF:ds[0];
   if(!startDate||!ds.includes(startDate)) startDate=def;
   sel.value=startDate;
+  applyDatePreset();
 }
 function render(){
   const res=compute(); const R=res?res.rows:[];
@@ -343,11 +354,13 @@ function render(){
     :`<tr><td>${esc(BASE_ASOF)}</td><td>${T("all")}</td><td><span class="tag">${T("init")}</span></td><td class="num">${T("initBasket")}</td><td class="wrapc"></td></tr>`;
 }
 
-$("startSel").addEventListener("change",e=>{startDate=e.target.value;render();});
+$("startSel").addEventListener("change",e=>{startDate=e.target.value;applyDatePreset();render();});
 $("lEn").addEventListener("click",()=>setLang("en"));
 $("lZh").addEventListener("click",()=>setLang("zh"));
 $("mLS").addEventListener("click",()=>setMode("ls"));
 $("mLO").addEventListener("click",()=>setMode("lo"));
+$("d22").addEventListener("click",()=>setStart("2026-09-22"));
+$("d15").addEventListener("click",()=>setStart("2026-09-15"));
 applyLang(); applyMode();
 makeCharts(); renderStart(); render();
 
