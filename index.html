@@ -319,7 +319,7 @@ function render(){
   const lastDate = R.length?R[R.length-1].date:(allDates().slice(-1)[0]||BASE_ASOF);
   const cur=filterBook(bookAt(lastDate)), e=exposure(cur);
   $("sExp").textContent=`${pp(e.L)} / ${pp(e.S)} / ${pp(e.net)}`;
-  $("emptyMain").style.display=res?"none":"flex";
+  $("emptyMain").style.display=res?"none":(Object.keys(prices).length?"flex":"none");
 
   const set=(id,v,t)=>{$(id).textContent=t??pct(v);$(id).className="v "+cls(v);};
   if(res){
