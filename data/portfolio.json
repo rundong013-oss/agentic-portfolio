@@ -1,5 +1,5 @@
 {
-  "asof": "2026-09-22",
+  "asof": "2026-09-15",
   "trades": [
     {"id":1,  "topic":"agent 入口", "en":"Agent gateway",                        "w":{"META":0.06}},
     {"id":2,  "topic":"券商利差", "en":"Broker cash spread",                        "w":{"IBKR":0.08, "SCHW":-0.08}},

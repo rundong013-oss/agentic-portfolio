@@ -98,7 +98,6 @@ footer{color:var(--muted);font-size:12px;margin:32px auto 0;max-width:80ch;text-
       <h1 data-i="title"></h1>
       <div class="ctrls">
         <div class="seg" role="group" aria-label="Mode"><button id="mLS" type="button">L/S</button><button id="mLO" type="button" data-i="longOnly"></button></div>
-        <div class="seg" role="group" aria-label="Start"><button id="d22" type="button">9/22</button><button id="d15" type="button">9/15</button></div>
         <div class="seg" role="group" aria-label="Language"><button id="lEn" type="button">EN</button><button id="lZh" type="button">中文</button></div>
         <select id="startSel" aria-label="Start date"></select>
       </div>
@@ -174,7 +173,7 @@ let TRADES = [
  {id:15, topic:"训练数据", en:"Training data",              w:{INOD:.03}},
  {id:16, topic:"agent 语音", en:"Agent voice",            w:{RNG:.03}},
 ];
-let BASE_ASOF = "2026-09-22";
+let BASE_ASOF = "2026-09-15";
 const BENCH="SPY";
 let prices={}, log=[], startDate=null;
 let MODE="ls"; /* "ls" = long/short, "lo" = long only */
@@ -257,14 +256,9 @@ function applyMode(){
   $("mLS").setAttribute("aria-pressed",MODE==="ls");
   $("mLO").setAttribute("aria-pressed",MODE==="lo");
 }
-function applyDatePreset(){
-  $("d22").setAttribute("aria-pressed",startDate==="2026-09-22");
-  $("d15").setAttribute("aria-pressed",startDate==="2026-09-15");
-}
 function setLang(l){ LANG=l; try{localStorage.setItem("lang",l);}catch(e){} applyLang(); applyMode();
   if(cumChart){ cumChart.data.datasets[0].label=T("port"); } render(); if(!allDates().length) renderStart(); }
 function setMode(m){ MODE=m; applyMode(); render(); }
-function setStart(d){ startDate=d; $("startSel").value=d; applyDatePreset(); render(); }
 
 let cumChart,dayChart,attrChart;
 function makeCharts(){
@@ -298,7 +292,6 @@ function renderStart(){
   const def=ds.includes(BASE_ASOF)?BASE_ASOF:ds[0];
   if(!startDate||!ds.includes(startDate)) startDate=def;
   sel.value=startDate;
-  applyDatePreset();
 }
 function render(){
   const res=compute(); const R=res?res.rows:[];
@@ -354,13 +347,11 @@ function render(){
     :`<tr><td>${esc(BASE_ASOF)}</td><td>${T("all")}</td><td><span class="tag">${T("init")}</span></td><td class="num">${T("initBasket")}</td><td class="wrapc"></td></tr>`;
 }
 
-$("startSel").addEventListener("change",e=>{startDate=e.target.value;applyDatePreset();render();});
+$("startSel").addEventListener("change",e=>{startDate=e.target.value;render();});
 $("lEn").addEventListener("click",()=>setLang("en"));
 $("lZh").addEventListener("click",()=>setLang("zh"));
 $("mLS").addEventListener("click",()=>setMode("ls"));
 $("mLO").addEventListener("click",()=>setMode("lo"));
-$("d22").addEventListener("click",()=>setStart("2026-09-22"));
-$("d15").addEventListener("click",()=>setStart("2026-09-15"));
 applyLang(); applyMode();
 makeCharts(); renderStart(); render();
 
