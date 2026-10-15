@@ -98,15 +98,13 @@ td.wrapc .l{color:var(--ink)} td.wrapc .s{color:var(--ink)}
 .subh:first-of-type{margin-top:20px}
 /* trade logic tooltip */
 .tip-wrap{position:relative;cursor:help;border-bottom:1px dashed var(--accent)}
-.tip-wrap .tip{display:none;position:absolute;left:0;top:calc(100% + 8px);width:min(420px,80vw);
-  background:#1A1A1A;border:1px solid var(--accent);padding:14px 16px;z-index:999;
+.tip-wrap .tip{display:none;position:fixed;width:min(420px,80vw);
+  background:#1A1A1A;border:1px solid var(--accent);padding:14px 16px;z-index:9999;
   font-size:12px;line-height:1.65;color:#fff;font-family:var(--mono);white-space:normal;
   pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)}
-.tip-wrap .tip::before{content:'';position:absolute;top:-6px;left:16px;
-  width:10px;height:10px;background:#1A1A1A;border-left:1px solid var(--accent);border-top:1px solid var(--accent);
-  transform:rotate(45deg)}
 .tip-wrap .tip-title{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;font-family:var(--sans);margin-bottom:8px}
 .tip-wrap:hover .tip{display:block}
+.tip-wrap .tip.tip-up{bottom:auto;top:auto}
 footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-align:center;line-height:1.7;border-top:1px dashed var(--hair);padding-top:24px}
 </style>
 </head>
@@ -411,6 +409,22 @@ $("mLS").addEventListener("click",()=>setMode("ls"));
 $("mLO").addEventListener("click",()=>setMode("lo"));
 applyLang(); applyMode();
 makeCharts(); renderStart(); render();
+
+/* Position tooltips dynamically */
+document.addEventListener("mouseenter",e=>{
+  const wrap=e.target.closest&&e.target.closest(".tip-wrap");
+  if(!wrap) return;
+  const tip=wrap.querySelector(".tip"); if(!tip) return;
+  const rect=wrap.getBoundingClientRect();
+  const tipH=tip.offsetHeight||200;
+  const spaceBelow=window.innerHeight-rect.bottom-16;
+  if(spaceBelow>=tipH+16){
+    tip.style.top=(rect.bottom+8)+"px"; tip.style.bottom="auto";
+  } else {
+    tip.style.bottom=(window.innerHeight-rect.top+8)+"px"; tip.style.top="auto";
+  }
+  tip.style.left=Math.max(8,Math.min(rect.left,window.innerWidth-440))+"px";
+},true);
 
 /* 3D scroll rotation for big numbers */
 (function(){
