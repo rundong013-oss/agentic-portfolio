@@ -64,7 +64,7 @@ select:hover{border-color:var(--accent)}
 .card::after{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid}
 .card h2{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin:0;color:var(--accent);font-family:var(--sans)}
 .head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
-.legend{display:flex;gap:16px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+.legend{display:flex;gap:16px;font-size:11px;color:#fff;font-family:var(--mono)}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
 .chart-main{position:relative;height:380px;margin-top:20px}
 .chart-sm{position:relative;height:130px;margin-top:16px}
@@ -265,7 +265,7 @@ function setMode(m){ MODE=m; applyMode(); render(); }
 
 let cumChart,dayChart,attrChart;
 function makeCharts(){
-  Chart.defaults.font.family=css("--mono")||"monospace"; Chart.defaults.font.size=11; Chart.defaults.color=css("--muted"); Chart.defaults.borderColor=css("--hair");
+  Chart.defaults.font.family=css("--mono")||"monospace"; Chart.defaults.font.size=11; Chart.defaults.color='#ffffff'; Chart.defaults.borderColor=css("--hair");
   const tip={backgroundColor:"rgba(26,26,26,.95)",borderColor:'rgba(191,109,21,.4)',borderWidth:1,padding:10,cornerRadius:0,displayColors:false,titleFont:{weight:"600",family:css("--mono")||"monospace"},bodyFont:{family:css("--mono")||"monospace"}};
   const xs={grid:{display:false},border:{display:false},ticks:{maxTicksLimit:8,font:{family:css("--mono")||"monospace"}}};
   const ys={grid:{color:'rgba(85,85,85,.25)',drawTicks:false},border:{display:false,dash:[4,4]},ticks:{callback:v=>(v*100).toFixed(1)+"%",maxTicksLimit:5,font:{family:css("--mono")||"monospace"}}};
