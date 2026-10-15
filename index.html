@@ -26,8 +26,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font
 
 /* hero */
 .hero{margin-bottom:48px}
+.hero-title{font-size:clamp(28px,5vw,52px);font-weight:700;letter-spacing:-.04em;line-height:1;margin:0 0 20px;
+  text-transform:uppercase;color:#fff;font-family:var(--sans);display:flex;justify-content:space-between;white-space:nowrap}
+.hero-title span{display:block}
 .eyebrow-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h1{font-size:11px;font-weight:600;margin:0;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-family:var(--sans)}
+h1{font-size:11px;font-weight:600;margin:0;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-family:var(--sans);display:none}
 select{appearance:none;-webkit-appearance:none;font:inherit;font-size:11px;color:var(--ink);background:var(--pill);border:1px solid var(--muted);border-radius:0;
   padding:5px 28px 5px 10px;cursor:pointer;font-family:var(--mono);
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
@@ -90,6 +93,7 @@ footer{color:var(--muted);font-size:11px;margin:40px auto 0;max-width:80ch;text-
 <body>
 <div class="wrap">
   <section class="hero">
+    <div class="hero-title" data-i-title><span>David's</span><span>Agentic</span><span>Portfolio</span></div>
     <div class="eyebrow-row">
       <h1 data-i="title"></h1>
       <div class="ctrls">
@@ -242,6 +246,8 @@ function applyLang(){
   document.documentElement.lang = LANG==="en"?"en":"zh-CN";
   document.title = LANG==="en"?"David's Agentic Portfolio":"David's Agentic 组合";
   document.querySelectorAll("[data-i]").forEach(el=>{ el.textContent=T(el.dataset.i); });
+  const ht=document.querySelector("[data-i-title]");
+  if(ht){ht.innerHTML=LANG==="en"?"<span>David's</span><span>Agentic</span><span>Portfolio</span>":"<span>David's</span><span>Agentic</span><span>组合</span>";}
   $("lEn").setAttribute("aria-pressed",LANG==="en"); $("lZh").setAttribute("aria-pressed",LANG==="zh");
 }
 function applyMode(){
