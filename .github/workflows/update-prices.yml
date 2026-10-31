@@ -1,11 +1,6 @@
 name: Update Prices
 
 on:
-  schedule:
-    # Hourly during US market hours: 14:30-20:30 UTC (9:30 AM-4:30 PM ET), Mon-Fri
-    - cron: "30 14-20 * * 1-5"
-    # EOD backfill after market close: 22:30 UTC
-    - cron: "30 22 * * 1-5"
   workflow_dispatch: # Allow manual trigger
 
 permissions:
